@@ -11,9 +11,7 @@ export const Dashboard = () => {
             <div className="column is-7">
                 <div className="notification">
                     <p className="title"> Graph </p>
-                    <div className="is-fullwidth" style={{ height: "500px" }}>
-                        <ScoreGraph />
-                    </div>
+                    <ScoreGraph />
                 </div>
                 <div className="notification">
                     <p className="title"> Top Teams </p>
