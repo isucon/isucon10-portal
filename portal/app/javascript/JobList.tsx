@@ -46,15 +46,15 @@ const jobs: Job[] = [
 
 export const JobList = () => (
     <table className="table is-bordered is-fullwidth">
-    <thead>
-        <tr className="has-background-light">
-            <th className="has-text-centered">Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        {jobs.map((job, key) => (
-            <JobListItem job={job} key={key} />
-        ))}
-    </tbody>
-</table>
+        <thead>
+            <tr className="has-background-light">
+                <th className="has-text-centered">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {jobs.map((job, key) => (
+                <JobListItem job={job} key={key} />
+            ))}
+        </tbody>
+    </table>
 )

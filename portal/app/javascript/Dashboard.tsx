@@ -7,27 +7,28 @@ import { JobList } from "./JobList"
 
 export const Dashboard = () => {
     return (
+        <div className="container">
+        <section className="is-fullwidth px-5 py-5">
+            <ScoreGraph />
+        </section>
         <div className="columns">
-            <div className="column is-7">
-                <div className="notification">
-                    <p className="title"> Graph </p>
-                    <ScoreGraph />
-                </div>
-                <div className="notification">
+            <div className="column is-7 px-5">
+                <section className="py-5">
                     <p className="title"> Top Teams </p>
                     <TopTeamList />
-                </div>
+                </section>
             </div>
-            <div className="column">
-                <div className="notification">
+            <div className="column is-5 px-5">
+                <section className="py-5">
                     <p className="title"> Job Enqueue Form </p>
                     <JobEnqueueForm />
-                </div>
-                <div className="notification">
+                </section>
+                <section className="py-5">
                     <p className="title"> Job List </p>
                     <JobList />
-                </div>
+                </section>
             </div>
+        </div>
         </div>
     )
 }
