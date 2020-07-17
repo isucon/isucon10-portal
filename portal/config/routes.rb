@@ -63,7 +63,7 @@ Rails.application.routes.draw do
     resource :session, only: %i(new create), as: :admin_session
   end
 
-  scope path: 'dashboard', module: 'dashboard' do
-    get '/' => 'dashboard#index', as: 'dashboard'
+  scope path: 'contestant', module: 'contestant' do
+    get '/dashboard' => 'dashboard#index', as: 'dashboard'
   end
 end
