@@ -24,7 +24,7 @@ const TeamItem: React.FC<TeamItemProps> = ({ rank, team }) => (
             {team.team.name}
         </td>
         <td>
-            {team.team.isStudent && <span className="tag is-primary is-pulled-right">Student</span>}
+            {team.team.isStudent && <span className="tag is-info is-pulled-right">学生チーム</span>}
         </td>
     </tr>
 )
