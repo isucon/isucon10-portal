@@ -17,7 +17,7 @@ export const JobEnqueueForm: React.FC<Props> = ({ client }) => {
                 <input className="input" type="text" placeholder="IP Address" ref={inputRef} />
             </div>
             <div className="control">
-                <button className="button is-info" onClick={handleClick}>
+                <button className="button is-primary" onClick={handleClick}>
                 Enqueue
                 </button>
             </div>
