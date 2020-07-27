@@ -1,9 +1,14 @@
 import React, {useRef, useCallback} from "react"
+import { ApiClient } from "./ApiClient"
 
-export const JobEnqueueForm = () => {
+interface Props {
+    client: ApiClient
+}
+
+export const JobEnqueueForm: React.FC<Props> = ({ client }) => {
     const inputRef = useRef<HTMLInputElement>(null)
     const handleClick = useCallback(() => {
-        console.log(inputRef?.current?.value)
+        client.enqueueBenchmarkJob()
     }, [!inputRef])
 
     return (

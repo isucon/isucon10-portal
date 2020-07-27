@@ -1,8 +1,13 @@
 import React, { useState } from "react"
+import useInterval from "use-interval"
+import { ApiClient } from "./ApiClient"
 
 import type { isuxportal } from "./pb"
 
-type Team = Pick<isuxportal.proto.services.audience.ListTeamsResponse.ITeamListItem, 'name' | 'isStudent'>
+type Team = {
+    score: number
+    team: isuxportal.proto.services.audience.ListTeamsResponse.ITeamListItem
+}
 
 interface TeamItemProps {
     rank: number
@@ -13,42 +18,30 @@ const TeamItem: React.FC<TeamItemProps> = ({ rank, team }) => (
     <tr>
         <th>{rank}</th>
         <td>
-            {team.name}
+            {team.score}
         </td>
         <td>
-            {team.isStudent && <span className="tag is-primary is-pulled-right">Student</span>}
+            {team.team.name}
+        </td>
+        <td>
+            {team.team.isStudent && <span className="tag is-primary is-pulled-right">Student</span>}
         </td>
     </tr>
 )
 
-const teams: Team[] = [
-    { name: '超すごいチーム', isStudent: false },
-    { name: '結構すごいチーム', isStudent: true },
-    { name: 'だいぶすごいチーム', isStudent: false },
-    { name: 'すごいチーム', isStudent: false },
-    { name: 'ちょっとすごいチーム', isStudent: true },
-    { name: '少しすごいチーム', isStudent: false },
-    { name: 'まあ普通なチーム', isStudent: false },
-    { name: 'そこそこ普通なチーム', isStudent: true },
-    { name: '普通なチーム', isStudent: true },
-    { name: '普通なチーム', isStudent: false },
-    { name: '普通なチーム', isStudent: false },
-    { name: '普通なチーム', isStudent: false },
-    { name: '普通なチーム', isStudent: false },
-    { name: '普通なチーム', isStudent: false },
-    { name: '普通なチーム', isStudent: true },
-    { name: '普通なチーム', isStudent: false },
-    { name: '普通なチーム', isStudent: false },
-    { name: '普通なチーム', isStudent: false },
-    { name: '普通なチーム', isStudent: false },
-    { name: '普通なチーム', isStudent: true },
-    { name: '普通なチーム', isStudent: false },
-]
-
 type Mode = 'all' | 'general' | 'students'
 
-export const TopTeamList = () => {
+interface Props {
+    client: ApiClient
+}
+
+export const Leaderboard: React.FC<Props> = ({ client }) => {
     const [mode, setMode] = useState<Mode>('all')
+    const [topTeams, setTopTeams] = useState<Team[]>([])
+
+    useInterval(async () => {
+        setTopTeams(await client.getLeaderboard())
+    }, 1000, true)
 
     return (
         <>
@@ -75,20 +68,21 @@ export const TopTeamList = () => {
                 <thead>
                     <tr className="has-background-light">
                         <th>Rank</th>
+                        <th>Score</th>
                         <th>Team</th>
                         <th>{/* isStudent? */}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {teams.filter(
-                        ({ isStudent }) => {
+                    {topTeams.filter(
+                        ({ team }) => {
                             switch (mode) {
                                 case 'all':
                                     return true
                                 case 'general':
-                                    return !isStudent
+                                    return !team.isStudent
                                 case 'students':
-                                    return isStudent
+                                    return team.isStudent
                                 default:
                                     true
                             }

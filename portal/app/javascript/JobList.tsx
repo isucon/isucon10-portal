@@ -1,27 +1,26 @@
-import React from "react"
-
-import type { isuxportal } from "./pb"
-
-type Job = Pick<isuxportal.proto.resources.BenchmarkJob, 'status'>
+import React, { useState } from "react"
+import useInterval from "use-interval"
+import { ApiClient } from "./ApiClient"
+import { isuxportal } from "./pb"
 
 interface JobListItemProps {
-    job: Job
+    job: isuxportal.proto.resources.BenchmarkJob
 }
 
 const STATUS_COLOR_MAP = new Map<number, string>([
-    [0, 'white'],
-    [1, 'info-light'],
-    [2, 'danger-light'],
-    [3, 'warning-light'],
-    [4, 'success-light'],
+    [isuxportal.proto.resources.BenchmarkJob.Status.PENDING, 'white'],
+    [isuxportal.proto.resources.BenchmarkJob.Status.RUNNING, 'info-light'],
+    [isuxportal.proto.resources.BenchmarkJob.Status.ERRORED, 'danger-light'],
+    [isuxportal.proto.resources.BenchmarkJob.Status.CANCELLED, 'warning-light'],
+    [isuxportal.proto.resources.BenchmarkJob.Status.FINISHED, 'success-light'],
 ])
 
 const STATUS_TEXT_MAP = new Map<number, string>([
-    [0, 'Pending'],
-    [1, 'Running'],
-    [2, 'Failed'],
-    [3, 'Cancelled'],
-    [4, 'Success'],
+    [isuxportal.proto.resources.BenchmarkJob.Status.PENDING, 'Pending'],
+    [isuxportal.proto.resources.BenchmarkJob.Status.RUNNING, 'Running'],
+    [isuxportal.proto.resources.BenchmarkJob.Status.ERRORED, 'Failed'],
+    [isuxportal.proto.resources.BenchmarkJob.Status.CANCELLED, 'Cancelled'],
+    [isuxportal.proto.resources.BenchmarkJob.Status.FINISHED, 'Success'],
 ])
 
 const JobListItem: React.FC<JobListItemProps> = ({ job }) => (
@@ -30,31 +29,29 @@ const JobListItem: React.FC<JobListItemProps> = ({ job }) => (
     </tr>
 )
 
-const jobs: Job[] = [
-    { status: 0 },
-    { status: 1 },
-    { status: 4 },
-    { status: 2 },
-    { status: 4 },
-    { status: 3 },
-    { status: 4 },
-    { status: 4 },
-    { status: 2 },
-    { status: 4 },
-    { status: 2 },
-]
+interface Props {
+    client: ApiClient
+}
 
-export const JobList = () => (
-    <table className="table is-bordered is-fullwidth">
-        <thead>
-            <tr className="has-background-light">
-                <th className="has-text-centered">Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            {jobs.map((job, key) => (
-                <JobListItem job={job} key={key} />
-            ))}
-        </tbody>
-    </table>
-)
+export const JobList: React.FC<Props> = ({ client }) => {
+    const [jobs, setJobs] = useState<isuxportal.proto.resources.BenchmarkJob[] | null>(null)
+
+    useInterval(async () => {
+        setJobs(await client.listBenchmarkJobs())
+    }, 1000, true)
+
+    return (
+        <table className="table is-fullwidth">
+            <thead>
+                <tr className="has-background-light">
+                    <th className="has-text-centered">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {jobs?.map((job, key) => (
+                    <JobListItem job={job} key={key} />
+                ))}
+            </tbody>
+        </table>
+    )
+}
