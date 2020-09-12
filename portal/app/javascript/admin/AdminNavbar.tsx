@@ -15,9 +15,24 @@ export interface Props {
 export interface State {}
 
 export class AdminNavbar extends React.Component<Props, State> {
+  navbarMenu: React.RefObject<HTMLDivElement>;
   constructor(props: Props) {
     super(props);
     this.state = {};
+    this.navbarMenu = React.createRef();
+  }
+
+  public componentDidMount() {
+    const menu = this.navbarMenu.current;
+    console.log("a");
+    if (menu) {
+      console.log("b");
+      menu.className = "navbar-menu is-active";
+      const targetName = menu.dataset.target;
+      menu.addEventListener("onclick", () => {
+        console.log("click");
+      });
+    }
   }
 
   public render() {
@@ -28,8 +43,18 @@ export class AdminNavbar extends React.Component<Props, State> {
             <Link className="navbar-item" to="/contestant">
               ISUCON10 Admin
             </Link>
+            <div
+              className="navbar-burger"
+              aria-label="menu"
+              aria-expanded="false"
+              data-target="isux-navbar-admin-header-items"
+            >
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+            </div>
           </div>
-          <div className="navbar-menu is-active">
+          <div id="isux-navbar-admin-header-items" className="navbar-menu" ref={this.navbarMenu}>
             <div className="navbar-start">
               <a className="navbar-item" href="/teams">
                 チーム一覧
