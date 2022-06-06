@@ -20,7 +20,7 @@ tokio = { version = "0.2", features = ["full"] }
 tonic = { version = "0.3", features = ["tls", "tls-roots"] }
 # async-stream = "0.3"
 futures-core = "0.3"
-nix = "0.18.0"
+nix = "0.20.2"
 mio = {version = "0.6"}
 tokio-util = {version = "0.3", features = ["codec"]}
 
