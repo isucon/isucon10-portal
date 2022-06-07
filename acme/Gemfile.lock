@@ -33,7 +33,7 @@ GEM
       aws-eventstream (~> 1, >= 1.0.2)
     faraday (1.0.1)
       multipart-post (>= 1.2, < 3)
-    jmespath (1.4.0)
+    jmespath (1.6.1)
     multipart-post (2.1.1)
     thor (1.0.1)
 
